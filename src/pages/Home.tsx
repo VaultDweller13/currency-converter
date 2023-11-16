@@ -1,3 +1,9 @@
+import { Container } from "../layouts/Container";
+
 export const Home = () => {
-  return <h2>Home page</h2>;
+  return (
+    <Container>
+      <h2>Home page</h2>
+    </Container>
+  );
 };

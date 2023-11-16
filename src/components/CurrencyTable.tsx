@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { CurrencyCard } from "./CurrencyCard";
 import styles from "./CurrencyTable.module.css";
+import { Container } from "../layouts/Container";
 
 type Currency = {
   id: number;
@@ -48,9 +49,9 @@ export const CurrencyTable = () => {
   ));
 
   return (
-    <>
+    <Container>
       <h2>List of supported currencies</h2>
       <section className={styles.container}>{cards}</section>
-    </>
+    </Container>
   );
 };
