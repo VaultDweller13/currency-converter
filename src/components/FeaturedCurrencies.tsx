@@ -51,7 +51,7 @@ export const FeaturedCurrencies = ({
   const tableData = currenciesData ? (
     Object.values(currenciesData).map((rate, index) => (
       <td key={index} className={styles.tableData}>
-        {rate.toFixed(3)}
+        {rate.toFixed(2)}
       </td>
     ))
   ) : (
