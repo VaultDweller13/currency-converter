@@ -42,7 +42,9 @@ export const FeaturedCurrencies = ({
 
   const tableHeader = currenciesData ? (
     Object.keys(currenciesData).map((currency, index) => (
-      <th key={index}>{currency}</th>
+      <th key={index} className={styles.tableDivider}>
+        {currency}
+      </th>
     ))
   ) : (
     <th> "N/A"</th>
@@ -65,13 +67,13 @@ export const FeaturedCurrencies = ({
         <table className={styles.table}>
           <thead>
             <tr>
-              <th></th>
+              <th className={styles.tableDivider}></th>
               {tableHeader}
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className={styles.tableData}>{base}</td>
+              <th className={styles.tableData}>{base}</th>
               {tableData}
             </tr>
           </tbody>

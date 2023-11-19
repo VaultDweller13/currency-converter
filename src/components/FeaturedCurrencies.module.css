@@ -2,10 +2,23 @@
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
+
+  max-width: 40%;
+
+  padding: 40px 40px;
+
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: 4px 4px 5px -6px rgba(0, 0, 0, 0.4);
 }
 
-.card {
-  padding: 5px 2px;
+.table {
+  color: rgb(104, 112, 130);
+}
+
+.tableDivider {
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgb(236, 239, 241);
 }
 
 .tableHeader {
@@ -13,5 +26,6 @@
 }
 
 .tableData {
-  padding: 5px;
+  padding: 5px 24px;
+  color: rgb(22, 53, 54);
 }
