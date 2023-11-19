@@ -1,29 +1,82 @@
 import styles from "./FeaturedCurrencies.module.css";
+import { useEffect, useState } from "react";
 
 type Props = {
+  heading?: string;
+  symbols: string;
   base: string;
-  rates: Record<string, number> | undefined;
 };
 
-export const FeaturedCurrencies = ({ base, rates }: Props) => {
-  const pairs = rates
-    ? Object.entries(rates).map((pair, index) => {
-        const currency = pair[0];
-        const rate = pair[1];
+type CurrencyRate = Record<string, number>;
 
-        return (
-          <span
-            key={index}
-            className={styles.card}
-          >{`1 ${base} equals ${rate} ${currency}`}</span>
-        );
-      })
-    : "Loading...";
+export const FeaturedCurrencies = ({
+  heading = "Featured currencies",
+  symbols,
+  base,
+}: Props) => {
+  const endpoint = "https://api.currencybeacon.com/v1/latest?";
+  const api_key = import.meta.env.VITE_API_KEY;
+
+  const [currenciesData, setCureenciesData] = useState<CurrencyRate>();
+
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      const response = await fetch(
+        endpoint +
+          new URLSearchParams({
+            base,
+            symbols,
+            api_key,
+          })
+      );
+
+      if (!response.ok) {
+        throw new Error("Request error");
+      }
+
+      setCureenciesData((await response.json()).rates);
+    };
+
+    fetchCurrencies();
+  }, [api_key, base, symbols]);
+
+  const tableHeader = currenciesData ? (
+    Object.keys(currenciesData).map((currency, index) => (
+      <th key={index}>{currency}</th>
+    ))
+  ) : (
+    <th> "N/A"</th>
+  );
+
+  const tableData = currenciesData ? (
+    Object.values(currenciesData).map((rate, index) => (
+      <td key={index} className={styles.tableData}>
+        {rate.toFixed(3)}
+      </td>
+    ))
+  ) : (
+    <td>"N/A"</td>
+  );
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.heading}>Featured currencies</h2>
-      <div className={styles.container}>{pairs}</div>
+      <h2 className={styles.heading}>{heading}</h2>
+      <div className={styles.container}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th></th>
+              {tableHeader}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.tableData}>{base}</td>
+              {tableData}
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 };

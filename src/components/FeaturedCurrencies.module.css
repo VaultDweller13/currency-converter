@@ -7,3 +7,11 @@
 .card {
   padding: 5px 2px;
 }
+
+.tableHeader {
+  border: 1px solid grey;
+}
+
+.tableData {
+  padding: 5px;
+}
