@@ -5,22 +5,20 @@ import { Container } from "../layouts/Container";
 export const Home = () => {
   const endpoint = "http://ip-api.com/json/?";
   const fields = "currency";
-  const [base, setBase] = useState("RUB");
+  const [base, setBase] = useState("AED");
 
   useEffect(() => {
-    const fetchLocation = async () => {
+    const fetchCurrency = async () => {
       const response = await fetch(endpoint + new URLSearchParams({ fields }));
 
       if (!response.ok) {
         throw new Error("Request error");
       }
 
-      const data = (await response.json()).currency;
-
-      setBase(data);
+      setBase((await response.json()).currency);
     };
 
-    fetchLocation();
+    fetchCurrency();
   }, []);
 
   return (

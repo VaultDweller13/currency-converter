@@ -17,9 +17,11 @@ export const FeaturedCurrencies = ({
   const endpoint = "https://api.currencybeacon.com/v1/latest?";
   const api_key = import.meta.env.VITE_API_KEY;
 
-  const [currenciesData, setCureenciesData] = useState<CurrencyRate>();
+  const [currenciesData, setCurrenciesData] = useState<CurrencyRate>();
 
   useEffect(() => {
+    let ignore = false;
+
     const fetchCurrencies = async () => {
       const response = await fetch(
         endpoint +
@@ -34,11 +36,17 @@ export const FeaturedCurrencies = ({
         throw new Error("Request error");
       }
 
-      setCureenciesData((await response.json()).rates);
+      if (!ignore) {
+        setCurrenciesData((await response.json()).rates);
+      }
     };
 
     fetchCurrencies();
-  }, [api_key, base, symbols]);
+
+    return () => {
+      ignore = true;
+    };
+  }, [base, symbols, api_key]);
 
   const tableHeader = currenciesData ? (
     Object.keys(currenciesData).map((currency, index) => (
