@@ -32,7 +32,7 @@ export const CurrencyTable = () => {
       }
 
       const dataObject = await response.json();
-
+      console.log(response);
       setData(dataObject.response);
     };
 
