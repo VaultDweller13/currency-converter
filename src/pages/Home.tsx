@@ -1,4 +1,5 @@
 import { FeaturedCurrencies } from "../components/FeaturedCurrencies";
+import { Converter } from "../components/Converter";
 import { Container } from "../layouts/Container";
 
 export const Home = () => {
@@ -11,6 +12,7 @@ export const Home = () => {
         symbols="EUR,RUB,JPY,CNY"
         heading="USD cross-rates"
       />
+      <Converter />
     </Container>
   );
 };
