@@ -1,12 +1,11 @@
-.container {
-  max-width: 40%;
-  padding: 40px;
-  background-color: #eff1f5;
-}
-
 .form {
   display: flex;
   flex-direction: column;
+
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 4px 5px -6px rgba(0, 0, 0, 0.4);
 }
 
 .label {

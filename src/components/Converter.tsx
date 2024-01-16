@@ -3,8 +3,8 @@ import styles from "./Converter.module.css";
 export const Converter = () => {
   return (
     <div className={styles.container}>
+      <h2>Convert currency</h2>
       <form action="" className={styles.form}>
-        <h3>Convert currency</h3>
         <div className={styles.field}>
           <label className={styles.label}>
             From
