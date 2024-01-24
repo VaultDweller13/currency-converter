@@ -14,9 +14,26 @@ const getCurrencies = async () => {
     throw new Error("Request error");
   }
 
-  const dataObject = await response.json();
+  const data = await response.json();
 
-  return dataObject.response;
+  return data.response;
 };
 
-export { getCurrencies };
+const getFeaturedCurrencies = async (currencyBase: string, symbols: string) => {
+  const endpoint = new URL("latest?", base);
+  endpoint.searchParams.append("base", currencyBase);
+  endpoint.searchParams.append("symbols", symbols);
+  endpoint.searchParams.append("api_key", apiKey);
+
+  const response = await fetch(endpoint);
+
+  if (!response.ok) {
+    throw new Error("Request error");
+  }
+
+  const data = await response.json();
+
+  return data.rates;
+};
+
+export { getCurrencies, getFeaturedCurrencies };

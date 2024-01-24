@@ -1,5 +1,6 @@
 import styles from "./FeaturedCurrencies.module.css";
 import { useEffect, useState } from "react";
+import { getFeaturedCurrencies } from "../api";
 
 type Props = {
   heading?: string;
@@ -14,31 +15,15 @@ export const FeaturedCurrencies = ({
   symbols,
   base,
 }: Props) => {
-  const endpoint = "https://api.currencybeacon.com/v1/latest?";
-  const api_key = import.meta.env.VITE_API_KEY;
-
   const [currenciesData, setCureenciesData] = useState<CurrencyRate>();
 
   useEffect(() => {
     const fetchCurrencies = async () => {
-      const response = await fetch(
-        endpoint +
-          new URLSearchParams({
-            base,
-            symbols,
-            api_key,
-          })
-      );
-
-      if (!response.ok) {
-        throw new Error("Request error");
-      }
-
-      setCureenciesData((await response.json()).rates);
+      setCureenciesData(await getFeaturedCurrencies(base, symbols));
     };
 
     fetchCurrencies();
-  }, [api_key, base, symbols]);
+  }, [base, symbols]);
 
   const tableHeader = currenciesData ? (
     Object.keys(currenciesData).map((currency, index) => (
