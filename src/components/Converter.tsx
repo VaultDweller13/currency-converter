@@ -1,6 +1,26 @@
+import { useEffect, useState } from "react";
 import styles from "./Converter.module.css";
+import { getCurrencies } from "../api";
+
+type CurrencyCode = { short_code: string; id: number };
 
 export const Converter = () => {
+  const [currencies, setCurrencies] = useState<CurrencyCode[]>([]);
+
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      setCurrencies(await getCurrencies());
+    };
+
+    fetchCurrencies();
+  }, []);
+
+  const options = currencies.map((currency) => (
+    <option value={currency["short_code"]} key={currency.id}>
+      {currency["short_code"]}
+    </option>
+  ));
+
   return (
     <div className={styles.container}>
       <h2>Convert currency</h2>
@@ -20,7 +40,7 @@ export const Converter = () => {
             id="fromCurrency"
             className={styles.input}
           >
-            <option value="RUB">RUB</option>
+            {options}
           </select>
         </div>
         <div className={styles.field}>
@@ -34,7 +54,7 @@ export const Converter = () => {
             />
           </label>
           <select name="toCurrency" id="toCurrency" className={styles.input}>
-            <option value="USD">USD</option>
+            {options}
           </select>
         </div>
       </form>
