@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CurrencyCard } from "./CurrencyCard";
 import styles from "./CurrencyTable.module.css";
 import { Container } from "../layouts/Container";
+import { getCurrencies } from "../api";
 
 type Currency = {
   id: number;
@@ -17,27 +18,15 @@ type Currency = {
 };
 
 export const CurrencyTable = () => {
-  const endpoint = "https://api.currencybeacon.com/v1/currencies?";
-  const apiKey = import.meta.env.VITE_API_KEY;
   const [data, setData] = useState<Currency[]>([]);
 
   useEffect(() => {
     const fetchCurrencies = async () => {
-      const response = await fetch(
-        endpoint + new URLSearchParams({ type: "fiat", api_key: apiKey })
-      );
-
-      if (!response.ok) {
-        throw new Error("Request error");
-      }
-
-      const dataObject = await response.json();
-
-      setData(dataObject.response);
+      setData(await getCurrencies());
     };
 
     fetchCurrencies();
-  }, [apiKey]);
+  }, []);
 
   const cards = data.map((currency) => (
     <CurrencyCard
