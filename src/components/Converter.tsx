@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./Converter.module.css";
 import { useRouteLoaderData } from "react-router-dom";
 import { convertCurrencies } from "../api";
+import { useDebouncedValue } from "../hooks";
 
 type CurrencyCode = { short_code: string; id: number };
 
@@ -11,8 +12,8 @@ export const Converter = () => {
   const [toCurrency, setToCurrency] = useState("RUB");
   const [fromAmount, setFromAmount] = useState("");
   const [toAmount, setToAmount] = useState("");
-  const [debouncedFromAmount, setDebouncedFromAmount] = useState("");
-  const [debouncedToAmount, setDebouncedToAmount] = useState("");
+  const debouncedFromAmount = useDebouncedValue(fromAmount, 400);
+  const debouncedToAmount = useDebouncedValue(toAmount, 400);
   const changedField = useRef<"from" | "to" | null>();
 
   const options = currencies.map((currency) => (
@@ -20,16 +21,6 @@ export const Converter = () => {
       {currency["short_code"]}
     </option>
   ));
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedFromAmount(fromAmount), 400);
-    return () => clearTimeout(timer);
-  }, [fromAmount]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedToAmount(toAmount), 400);
-    return () => clearTimeout(timer);
-  }, [toAmount]);
 
   useEffect(() => {
     const fetchConvertation = async () => {
