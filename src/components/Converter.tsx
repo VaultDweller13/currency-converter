@@ -1,19 +1,10 @@
-import { useEffect, useState } from "react";
 import styles from "./Converter.module.css";
-import { getCurrencies } from "../api";
+import { useRouteLoaderData } from "react-router-dom";
 
 type CurrencyCode = { short_code: string; id: number };
 
 export const Converter = () => {
-  const [currencies, setCurrencies] = useState<CurrencyCode[]>([]);
-
-  useEffect(() => {
-    const fetchCurrencies = async () => {
-      setCurrencies(await getCurrencies());
-    };
-
-    fetchCurrencies();
-  }, []);
+  const currencies = useRouteLoaderData("root") as CurrencyCode[];
 
   const options = currencies.map((currency) => (
     <option value={currency["short_code"]} key={currency.id}>

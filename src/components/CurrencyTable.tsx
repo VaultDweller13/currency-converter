@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
 import { CurrencyCard } from "./CurrencyCard";
 import styles from "./CurrencyTable.module.css";
 import { Container } from "../layouts/Container";
-import { getCurrencies } from "../api";
+import { useRouteLoaderData } from "react-router-dom";
 
 type Currency = {
   id: number;
@@ -18,15 +17,7 @@ type Currency = {
 };
 
 export const CurrencyTable = () => {
-  const [data, setData] = useState<Currency[]>([]);
-
-  useEffect(() => {
-    const fetchCurrencies = async () => {
-      setData(await getCurrencies());
-    };
-
-    fetchCurrencies();
-  }, []);
+  const data = useRouteLoaderData("root") as Currency[];
 
   const cards = data.map((currency) => (
     <CurrencyCard

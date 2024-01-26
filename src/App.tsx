@@ -7,10 +7,11 @@ import {
 import { CurrencyTable } from "./components/CurrencyTable";
 import { Home } from "./pages/Home";
 import { Layout } from "./layouts/Layout";
+import { getCurrencies } from "./api";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
+    <Route path="/" loader={getCurrencies} id="root" element={<Layout />}>
       <Route index element={<Home />} />
       <Route path="currencies" element={<CurrencyTable />} />
     </Route>
