@@ -10,7 +10,8 @@ export const Converter = () => {
   const [fromCurrency, setFromCurrency] = useState("USD");
   const [toCurrency, setToCurrency] = useState("RUB");
   const [fromAmount, setFromAmount] = useState("");
-  const [ToAmount, setToAmount] = useState("");
+  const [toAmount, setToAmount] = useState("");
+  const [debouncedFromAmount, setDebouncedFromAmount] = useState("");
 
   const options = currencies.map((currency) => (
     <option value={currency["short_code"]} key={currency.id}>
@@ -19,18 +20,23 @@ export const Converter = () => {
   ));
 
   useEffect(() => {
+    const timer = setTimeout(() => setDebouncedFromAmount(fromAmount), 300);
+    return () => clearTimeout(timer);
+  }, [fromAmount]);
+
+  useEffect(() => {
     const fetchConvertation = async () => {
       const result = await convertCurrencies(
         fromCurrency,
         toCurrency,
-        fromAmount
+        debouncedFromAmount
       );
 
       setToAmount(result ? result.toFixed(2) : "");
     };
 
     fetchConvertation();
-  }, [fromAmount, fromCurrency, toCurrency]);
+  }, [debouncedFromAmount, fromCurrency, toCurrency]);
 
   return (
     <div className={styles.container}>
@@ -65,7 +71,7 @@ export const Converter = () => {
               type="number"
               id="toAmount"
               name="toAmount"
-              value={ToAmount}
+              value={toAmount}
               onChange={(e) => setToAmount(e.target.value)}
               className={styles.input}
             />
