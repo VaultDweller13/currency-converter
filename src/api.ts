@@ -2,19 +2,8 @@ const base = "https://api.currencybeacon.com/v1/";
 const apiKey = import.meta.env.VITE_API_KEY;
 
 const getCurrencies = async () => {
-  const type = "fiat";
-
-  const endpoint = new URL("currencies?", base);
-  endpoint.searchParams.append("type", type);
-  endpoint.searchParams.append("api_key", apiKey);
-
-  const response = await fetch(endpoint);
-
-  if (!response.ok) {
-    throw new Error("Request error");
-  }
-
-  const data = await response.json();
+  const endpoint = new URL(`currencies?type=fiat&api_key=${apiKey}`, base);
+  const data = await fetchData(endpoint);
 
   return data.response;
 };
@@ -24,16 +13,19 @@ const getFeaturedCurrencies = async (currencyBase: string, symbols: string) => {
   endpoint.searchParams.append("base", currencyBase);
   endpoint.searchParams.append("symbols", symbols);
   endpoint.searchParams.append("api_key", apiKey);
+  const data = await fetchData(endpoint);
 
+  return data.rates;
+};
+
+const fetchData = async (endpoint: string | URL) => {
   const response = await fetch(endpoint);
 
   if (!response.ok) {
     throw new Error("Request error");
   }
 
-  const data = await response.json();
-
-  return data.rates;
+  return await response.json();
 };
 
 export { getCurrencies, getFeaturedCurrencies };
