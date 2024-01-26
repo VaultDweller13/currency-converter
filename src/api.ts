@@ -18,6 +18,20 @@ const getFeaturedCurrencies = async (currencyBase: string, symbols: string) => {
   return data.rates;
 };
 
+const convertCurrencies = async (from: string, to: string, amount: string) => {
+  if (!from || !to || !amount) return "";
+
+  const endpoint = new URL("convert?", base);
+  endpoint.searchParams.append("from", from);
+  endpoint.searchParams.append("to", to);
+  endpoint.searchParams.append("amount", amount);
+  endpoint.searchParams.append("api_key", apiKey);
+
+  const data = await fetchData(endpoint);
+
+  return data.response.value;
+};
+
 const fetchData = async (endpoint: string | URL) => {
   const response = await fetch(endpoint);
 
@@ -28,4 +42,4 @@ const fetchData = async (endpoint: string | URL) => {
   return await response.json();
 };
 
-export { getCurrencies, getFeaturedCurrencies };
+export { getCurrencies, getFeaturedCurrencies, convertCurrencies };
