@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Converter.module.css";
 import { useRouteLoaderData } from "react-router-dom";
 import { convertCurrencies } from "../api";
@@ -12,6 +12,8 @@ export const Converter = () => {
   const [fromAmount, setFromAmount] = useState("");
   const [toAmount, setToAmount] = useState("");
   const [debouncedFromAmount, setDebouncedFromAmount] = useState("");
+  const [debouncedToAmount, setDebouncedToAmount] = useState("");
+  const changedField = useRef<"from" | "to" | null>();
 
   const options = currencies.map((currency) => (
     <option value={currency["short_code"]} key={currency.id}>
@@ -20,23 +22,39 @@ export const Converter = () => {
   ));
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedFromAmount(fromAmount), 300);
+    const timer = setTimeout(() => setDebouncedFromAmount(fromAmount), 400);
     return () => clearTimeout(timer);
   }, [fromAmount]);
 
   useEffect(() => {
-    const fetchConvertation = async () => {
-      const result = await convertCurrencies(
-        fromCurrency,
-        toCurrency,
-        debouncedFromAmount
-      );
+    const timer = setTimeout(() => setDebouncedToAmount(toAmount), 400);
+    return () => clearTimeout(timer);
+  }, [toAmount]);
 
-      setToAmount(result ? result.toFixed(2) : "");
+  useEffect(() => {
+    const fetchConvertation = async () => {
+      if (changedField.current === "from") {
+        const result = await convertCurrencies(
+          fromCurrency,
+          toCurrency,
+          debouncedFromAmount
+        );
+
+        setToAmount(result ? result.toFixed(2) : "");
+      }
+
+      if (changedField.current === "to") {
+        const result = await convertCurrencies(
+          toCurrency,
+          fromCurrency,
+          debouncedToAmount
+        );
+        setFromAmount(result ? result.toFixed(2) : "");
+      }
     };
 
     fetchConvertation();
-  }, [debouncedFromAmount, fromCurrency, toCurrency]);
+  }, [debouncedFromAmount, debouncedToAmount, fromCurrency, toCurrency]);
 
   return (
     <div className={styles.container}>
@@ -50,7 +68,10 @@ export const Converter = () => {
               id="fromAmount"
               name="fromAmount"
               value={fromAmount}
-              onChange={(e) => setFromAmount(e.target.value)}
+              onChange={(e) => {
+                changedField.current = "from";
+                setFromAmount(e.target.value);
+              }}
               className={styles.input}
             />
           </label>
@@ -72,7 +93,10 @@ export const Converter = () => {
               id="toAmount"
               name="toAmount"
               value={toAmount}
-              onChange={(e) => setToAmount(e.target.value)}
+              onChange={(e) => {
+                changedField.current = "to";
+                setToAmount(e.target.value);
+              }}
               className={styles.input}
             />
           </label>

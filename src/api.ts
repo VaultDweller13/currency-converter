@@ -19,7 +19,7 @@ const getFeaturedCurrencies = async (currencyBase: string, symbols: string) => {
 };
 
 const convertCurrencies = async (from: string, to: string, amount: string) => {
-  if (!from || !to || !amount) return "";
+  if (!from || !to || !amount) return 0;
 
   const endpoint = new URL("convert?", base);
   endpoint.searchParams.append("from", from);
