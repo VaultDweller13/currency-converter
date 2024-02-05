@@ -1,4 +1,4 @@
-import { cache, cacheData } from "./cache";
+import { getCachedData, cacheData } from "./cache";
 
 const base = "https://api.currencybeacon.com/v1/";
 const apiKey = import.meta.env.VITE_API_KEY;
@@ -18,7 +18,7 @@ const getFeaturedCurrencies = async (currencyBase: string, symbols: string) => {
 
   const key = endpoint.toString();
 
-  let data = cache.get(key);
+  let data = getCachedData(key);
   if (!data) {
     data = await fetchData(endpoint);
     cacheData(key, data);
