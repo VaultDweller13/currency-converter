@@ -3,7 +3,6 @@ const cache = new Map<string, string>();
 function cacheData(key: string, data: unknown) {
   const serializedData = JSON.stringify(data);
   cache.set(key, serializedData);
-  console.log(cache);
 }
 
 function getCachedData(key: string) {
