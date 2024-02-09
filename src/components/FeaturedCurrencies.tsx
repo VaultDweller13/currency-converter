@@ -1,6 +1,7 @@
 import styles from "./FeaturedCurrencies.module.css";
 import { useEffect, useState } from "react";
 import { getFeaturedCurrencies } from "../api";
+import { Card } from "../layouts/Card";
 
 type Props = {
   heading?: string;
@@ -46,9 +47,9 @@ export const FeaturedCurrencies = ({
   );
 
   return (
-    <section className={styles.section}>
+    <div>
       <h2 className={styles.heading}>{heading}</h2>
-      <div className={styles.container}>
+      <Card>
         <table className={styles.table}>
           <thead>
             <tr>
@@ -63,7 +64,7 @@ export const FeaturedCurrencies = ({
             </tr>
           </tbody>
         </table>
-      </div>
-    </section>
+      </Card>
+    </div>
   );
 };
