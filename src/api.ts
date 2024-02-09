@@ -1,3 +1,5 @@
+import { getCachedData, cacheData } from "./cache";
+
 const base = "https://api.currencybeacon.com/v1/";
 const apiKey = import.meta.env.VITE_API_KEY;
 
@@ -13,9 +15,16 @@ const getFeaturedCurrencies = async (currencyBase: string, symbols: string) => {
   endpoint.searchParams.append("base", currencyBase);
   endpoint.searchParams.append("symbols", symbols);
   endpoint.searchParams.append("api_key", apiKey);
-  const data = await fetchData(endpoint);
 
-  return data.rates;
+  const key = endpoint.toString();
+
+  let data = getCachedData(key);
+  if (!data) {
+    data = await fetchData(endpoint);
+    cacheData(key, data);
+  }
+
+  return (data as { rates: unknown }).rates as Record<string, number>;
 };
 
 const convertCurrencies = async (from: string, to: string, amount: string) => {
